@@ -59,3 +59,6 @@ def GetVehicleMaintenance(page, pageSize):
     startIndex = (page - 1) * pageSize
     endIndex = startIndex + pageSize
     return Vehiclemaintenance.objects.all().order_by('-date')[startIndex:endIndex]
+
+def GetMaintenanceTypes():
+    return MaintenanceType.objects.all()

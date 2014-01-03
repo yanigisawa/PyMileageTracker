@@ -1,0 +1,3 @@
+ZODB_STORAGE = "file://db/mileageDb.fs"
+CSRF_ENABLED = False
+SECRET_KEY = 'some-secret-key'

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Mileage Form Input</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+        <meta name="format-detection" content="telephone=no">
+        <link rel="apple-touch-icon" href="/static/img/mileage_thumb.jpg" />
+        <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.0/jquery.mobile-1.4.0.min.css" />
+        <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+        <script src="http://code.jquery.com/mobile/1.4.0/jquery.mobile-1.4.0.min.js"></script>
+        <script src="{{ url_for('static', filename='js/geo.js') }}" type="text/javascript" charset="utf-8"></script>
+        <script src="{{ url_for('static', filename='js/jquery.validate.min.js') }}" type="text/javascript" ></script>
+        <script src="{{ url_for('static', filename='js/getLatLong.js')}}"></script>
+        <script src="{{ url_for('static', filename='js/helpers.js') }}"></script>
+        <style>
+            #loading { display: none; }
+            #recentHistory { display: none; }
+        </style>
+    </head>
+    <body>
+    <div data-role="page">
+        <div data-role="header">
+            <h2>Fillup Input</h2>
+        </div>
+
+        <div data-role="navbar">
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/history">Full History</a></li>
+            </ul>
+        </div>
+
+        <div data-role="content">
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            <ul>
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            {% endwith %}
+
+            <div id="recentHistory"></div>
+
+            {% block content %}{% endblock %}
+        </div>
+
+        <div data-role="footer">
+            <script type="text/javascript">
+            $(document).ready(function () {
+                Helpers.initializePage();
+            });
+            </script>
+        </div>
+    </div>
+    </body>
+</html>

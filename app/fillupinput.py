@@ -18,23 +18,23 @@ def PrintHeaders():
     <meta name="format-detection" content="telephone=no">
     <link rel="apple-touch-icon" href="mileage_thumb.jpg" />
     <script src="js/geo.js" type="text/javascript" charset="utf-8"></script>
-    <script src="js/jquery.min.1.6.1.js" type="text/javascript"></script>
-    <script src="js/getLatLong.js" type="text/javascript" charset="utf-8"></script>
+	<script src="http://code.jquery.com/jquery-1.6.4.min.js"></script>
+    <script src="js/helpers.js" type="text/javascript" charset="utf-8"></script>
     <script src="js/jquery.validate.min.js" type="text/javascript" ></script>
-    <style>
-        input {
-            -webkit-text-size-adjust: 150%;
-        }
-    </style>
-
+    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.0.1/jquery.mobile-1.0.1.min.css" />
+	<script src="http://code.jquery.com/mobile/1.0.1/jquery.mobile-1.0.1.min.js"></script>
     </head>
     <body>
-      <h3> Mobile Mileage Form Input</h3>
+    <div data-role="page">
+        <div data-role="header">
+		<h1>Maintenance Input</h1>
+        </div>
+    <div data-role="content">
     """
 
 def PrintShortHistory():
     print """
-    <table cellpadding="4" cellspacing="0" border="1">
+    <table cellpadding="4" cellspacing="0" border="1" width="100%">
         <tr><th>Date</th>
             <th>Miles</th><th>Gallons</th><th>Cost</th><th>Mileage</th>
         </tr>
@@ -57,17 +57,22 @@ def PrintFooter():
     print """
     <script type="text/javascript">
         $(document).ready(function () {
-            LatLong.getLatLong(function() {
-                $("input[name='latitude']").val(LatLong.latitude);
-                $("input[name='longitude']").val(LatLong.longitude);
-            });
-            $("#mainForm").validate();
-
+            Mileage.InitializePage();
         });
 
     </script>
+    </div>
+    </div>
     </body></html>
     """
+
+def GetMaintenanceOptions():
+    types = MileageDbInput.GetMaintenanceTypes()
+    optionsStr = ""
+    for t in types:
+        optionsStr += ("<option value=\"%s\">%s</option>" % (t.id, t.name))
+
+    return optionsStr
 
 def PrintForm():
     today = datetime.datetime.today()
@@ -75,13 +80,15 @@ def PrintForm():
       <form id="mainForm" method="post" action="fillupinput.py">
         <input type="hidden" name="submitted" value="true"/>
         <p>Date: %s %s</p>
-        <p>Miles: <input type="number" name="miles" autofocus step="0.1" class="standard required"/></p>
-        <p>Price: <input type="number" name="pricePerGallon" step="0.001" class="standard required"/></p>
-        <p>Gallons: <input type="number" name="gallons" step="0.001" class="standard required"/></p>
+        <p>Type <select id="maintenanceTypes">%s</select>
+        <p class="Fill-up">Miles: <input type="number" name="miles" autofocus step="0.1" class="standard required"/></p>
+        <p class="Fill-up">Price: <input type="number" name="pricePerGallon" step="0.001" class="standard required"/></p>
+        <p class="Fill-up">Gallons: <input type="number" name="gallons" step="0.001" class="standard required"/></p>
+        <p class="Other">Odometer: <input type="number" name="odometer" step="0.1" class="standard required"/></p>
         <p><input type="submit" value="Submit" /></p>
         <input type="hidden" name="latitude" value="" />
         <input type="hidden" name="longitude" value="" />
-      </form>""" % (today.date(), today.time().strftime("%H:%M"))
+      </form>""" % (today.date(), today.time().strftime("%H:%M"), GetMaintenanceOptions())
 
 def Main():
 

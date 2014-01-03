@@ -23,7 +23,7 @@ class Dailymileage(models.Model):
         return "Miles: %s - CreateDate: %s" % (self.miles, self.createdate)
 
 
-class Maintenancetype(models.Model):
+class MaintenanceType(models.Model):
     id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=150, db_column='Name') # Field name made lowercase.
 
@@ -59,7 +59,7 @@ class Vehicle(models.Model):
 class Vehiclemaintenance(models.Model):
     id = models.IntegerField(primary_key=True)
     vehicleid = models.ForeignKey(Vehicle, db_column='VehicleId') # Field name made lowercase.
-    maintenancetypeid = models.ForeignKey(Maintenancetype, db_column='MaintenanceTypeId') # Field name made lowercase.
+    maintenancetypeid = models.ForeignKey(MaintenanceType, db_column='MaintenanceTypeId') # Field name made lowercase.
     date = models.DateTimeField(db_column='Date') # Field name made lowercase.
     odometer = models.DecimalField(decimal_places=3, null=True, max_digits=22, 
         db_column='Odometer', blank=True) # Field name made lowercase.

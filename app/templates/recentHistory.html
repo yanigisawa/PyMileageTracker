@@ -1,0 +1,14 @@
+<table cellpadding="4" cellspacing="0" border="1" width="100%">
+    <tr>
+        <th>Date</th><th>Miles</th>
+        <th>Gallons</th><th>Price</th>
+        <th>Mileage</th>
+    </tr>
+    {% for record in recentHistory %}
+        <tr>
+            <td>{{record.date}}</td><td>{{ record.miles }}</td>
+            <td>{{ record.gallons }}</td><td>{{ record.price }}</td>
+            <td>{{ record.mileage }} </td>
+        </tr>   
+    {% endfor %}
+</table>
