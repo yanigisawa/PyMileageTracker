@@ -6,8 +6,7 @@ import os
 
 @app.route('/')
 def index():
-    today = datetime.now()
-    return render_template("index.html", todayDate = today.date(), todayTime = today.time())
+    return render_template("index.html")
 
 def getFillUpsTree():
     if not db.has_key("fillUps"):

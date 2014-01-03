@@ -39,26 +39,30 @@ Helpers.submitMileage = function() {
         return;
     }
 
-    $("#loading").show();
-    $.ajax({
-        type: "POST",
-        url: "/submitMileage",
-        dataType: "json",
-        data: {
-            miles: $("#miles").val(),
-            price: $("#pricePerGallon").val(),
-            gallons: $("#gallons").val(), 
-            latitude: $("#latitude").val(),
-            longitude: $("#longitude").val()
-        }, 
-        success: function() {
-            $("#form").hide(400); 
-            $("#results").show(400);
-            $("#recentHistory").load("/recentHistory");
-        },
-        error: function() {
-            alert("Failed to submit mileage.");
-        },
-        complete: function() { $("#loading").hide(); }
+    $("#loading").show(100);
+    $("#recentHistory").hide(400, function() {
+        $.ajax({
+            type: "POST",
+            url: "/submitMileage",
+            dataType: "json",
+            data: {
+                miles: $("#miles").val(),
+                price: $("#pricePerGallon").val(),
+                gallons: $("#gallons").val(), 
+                latitude: $("#latitude").val(),
+                longitude: $("#longitude").val()
+            }, 
+            success: function() {
+                $("#form").hide(400); 
+                $("#results").show(400);
+                $("#recentHistory").load("/recentHistory", function() {
+                    $("#recentHistory").show(400)
+                });
+            },
+            error: function() {
+                alert("Failed to submit mileage.");
+            },
+            complete: function() { $("#loading").hide(100); }
+        });
     });
 }

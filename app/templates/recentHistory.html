@@ -1,3 +1,13 @@
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<ul>
+    {% for message in messages %}
+        <li>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+{% endwith %}
+
 <table cellpadding="4" cellspacing="0" border="1" width="100%">
     <tr>
         <th>Date</th><th>Miles</th>
