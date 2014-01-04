@@ -1,6 +1,6 @@
 from app import app, db
 from flask import render_template, request, flash, jsonify, url_for
-from datetime import datetime
+from datetime import datetime, timedelta
 from pytz import timezone
 from models import FillUp
 import os, csv
@@ -21,9 +21,11 @@ def getFillUpsTree():
 @app.route('/submitMileage', methods = ['POST'])
 def submitMileage():
     tree = getFillUpsTree()
-    fillUp = FillUp(datetime.utcnow(), request.form["miles"], 
-        request.form["price"], request.form["gallons"], request.form["latitude"],
-        request.form["longitude"])
+    fillUp = FillUp(datetime.utcnow(), Decimal(request.form["miles"]), 
+        Decimal(request.form["price"]), 
+        Decimal(request.form["gallons"]), 
+        Decimal(request.form["latitude"]),
+        Decimal(request.form["longitude"]))
     tree[fillUp.date] = fillUp
 
     flash("Fillup Saved")
@@ -33,13 +35,12 @@ def submitMileage():
 @app.route('/recentHistory')
 def recentHistory():
     tree = getFillUpsTree()
-    print("Record Count: {0}".format(len(tree)))
     recentHistory = []
-    for index, value in tree.iteritems():
-        print("key,value: {0},{1}".format(index, value))
-        recentHistory.append(value)
-        if len(recentHistory) >= 5:
-            break
+    key = tree.maxKey()
+    while len(recentHistory) < 5:
+        recentHistory.append(tree[key])
+        oneSecondEarlier = key + timedelta(seconds = -1)
+        key = tree.maxKey(oneSecondEarlier)
 
     return render_template("recentHistory.html", recentHistory = recentHistory)
 
@@ -69,7 +70,6 @@ def importRecords():
                 , latitude = Decimal(item["Latitude"])
                 , longitude = Decimal(item["Longitude"]))
 
-            print("Date: {0}".format(fillUp.date))
             fillUpTree[fillUp.date] = fillUp
             records.append(fillUp)
 
