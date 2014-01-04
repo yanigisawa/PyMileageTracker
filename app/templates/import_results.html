@@ -1,0 +1,18 @@
+<table cellpadding="4" cellspacing="0" border="1" width="100%">
+    <thead>
+    <tr>
+        <th>Date</th><th>Miles</th>
+        <th>Gallons</th><th>Price</th>
+        <th>Mileage</th><th>Latitude</th>
+        <th>Longitude</th>
+    </tr>
+    </thead>
+    {% for record in records%}
+        <tr>
+            <td>{{ record.date }}</td><td>{{ record.miles }}</td>
+            <td>{{ record.gallons }}</td><td>{{ record.price }}</td>
+            <td>{{ record.mileage }} </td><td>{{ record.latitude }}</td>
+            <td>{{ record.longitude }}</td>
+        </tr>   
+    {% endfor %}
+</table>

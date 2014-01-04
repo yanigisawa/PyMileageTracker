@@ -1,0 +1,17 @@
+Flask==0.10.1
+Flask-ZODB==0.1
+Jinja2==2.7.1
+MarkupSafe==0.18
+Werkzeug==0.9.4
+ZConfig==3.0.3
+ZODB3==3.10.5
+itsdangerous==0.23
+mock==1.0.1
+pytz==2013.9
+transaction==1.4.1
+wsgiref==0.1.2
+zc.lockfile==1.1.0
+zdaemon==4.0.0
+zodburi==1.1
+zope.event==4.0.2
+zope.interface==4.0.5
