@@ -21,16 +21,26 @@ def getFillUpsTree():
 @app.route('/submitMileage', methods = ['POST'])
 def submitMileage():
     tree = getFillUpsTree()
-    fillUp = FillUp(datetime.utcnow(), Decimal(request.form["miles"]), 
+    utczone = timezone("UTC")
+    latitude = request.form["latitude"]
+    if not latitude:
+        latitude = 0
+    longitude = request.form["longitude"]
+    if not longitude:
+        longitude = 0
+    fillUp = FillUp(datetime.now(utczone), Decimal(request.form["miles"]), 
         Decimal(request.form["price"]), 
         Decimal(request.form["gallons"]), 
-        Decimal(request.form["latitude"]),
-        Decimal(request.form["longitude"]))
+        Decimal(latitude),
+        Decimal(longitude))
     tree[fillUp.date] = fillUp
 
     flash("Fillup Saved")
     flash("Fillup Cost: {0}".format(fillUp.price * fillUp.gallons))
-    flash("Mileage: {0}".format(fillUp.miles * fillUp.price))
+    flash("Mileage: {0}".format(fillUp.mileage))
+    response = {}
+    response["success"] = True
+    return jsonify(response)
 
 @app.route('/recentHistory')
 def recentHistory():
@@ -43,6 +53,19 @@ def recentHistory():
         key = tree.maxKey(oneSecondEarlier)
 
     return render_template("recentHistory.html", recentHistory = recentHistory)
+
+@app.route('/history')
+def history():
+    tree = getFillUpsTree()
+    recentHistory = []
+    maxKey = tree.maxKey()
+    minKey = tree.minKey()
+    while maxKey > minKey:
+        recentHistory.append(tree[maxKey])
+        oneSecondEarlier = maxKey + timedelta(seconds = -1)
+        maxKey = tree.maxKey(oneSecondEarlier)
+
+    return render_template("full_history.html", recentHistory = recentHistory)
 
 @app.route('/import')
 def importRecords():

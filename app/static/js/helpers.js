@@ -1,8 +1,8 @@
 var Helpers = {};
 Helpers.initializePage = function() {
     LatLong.getLatLong(function() {
-        $("input[name='latitude']").val(LatLong.latitude);
-        $("input[name='longitude']").val(LatLong.longitude);
+        $("#latitude").val(LatLong.latitude);
+        $("#longitude").val(LatLong.longitude);
     });
     $("#mainForm").validate({
         rules: {
@@ -52,7 +52,7 @@ Helpers.submitMileage = function() {
                 latitude: $("#latitude").val(),
                 longitude: $("#longitude").val()
             }, 
-            success: function() {
+            success: function(result) {
                 $("#form").hide(400); 
                 $("#results").show(400);
                 $("#recentHistory").load("/recentHistory", function() {
