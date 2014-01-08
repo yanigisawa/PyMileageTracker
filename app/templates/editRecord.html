@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+
+<form action="{{ url_for('editDate', date = dateKey ) }}" method="post">
+    <p>Miles: {{ form.miles }} </p>
+    <p>Price: {{ form.price }} </p>
+    <p>Gallons: {{ form.gallons }} </p>
+    <p><input type="submit" value="Submit" id="editButton" name="submitButton"/></p>
+    {{ form.date }}
+</form
+
+{% endblock %}

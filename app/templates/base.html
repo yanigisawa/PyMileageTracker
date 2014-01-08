@@ -18,7 +18,7 @@
         </style>
     </head>
     <body>
-    <div data-role="page">
+    <div data-role="page" id="mainPage" data-url="{{ url }}">
         <div data-role="header">
             <h2>Fillup Input</h2>
         </div>
@@ -39,11 +39,11 @@
 
         <div data-role="footer">
         </div>
-        <script type="text/javascript">
-        $(document).ready(function () {
-            Helpers.initializePage();
-        });
-        </script>
     </div>
+    <script type="text/javascript">
+    $(document).bind('pageinit', function () {
+        Helpers.initializePage();
+    });
+    </script>
     </body>
 </html>

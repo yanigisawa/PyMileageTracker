@@ -10,7 +10,7 @@ Helpers.initializePage = function() {
                 required: true,
                 number: true
             }, 
-            pricePerGallon: {
+            price: {
                 required: true,
                 number: true
             }, 
@@ -29,9 +29,14 @@ Helpers.initializePage = function() {
         }
     });
 
-    $("#recentHistory").load("/recentHistory", function() {
-        $("#recentHistory").show(400);
-    });
+   var url = document.URL
+   url = url.replace(window.location.origin, "")
+
+   if (url.length <= 1) {
+        $("#recentHistory").load("/recentHistory", function() {
+            $("#recentHistory").show(400);
+        });
+    }
 }
 
 Helpers.submitMileage = function() {
@@ -47,7 +52,7 @@ Helpers.submitMileage = function() {
             dataType: "json",
             data: {
                 miles: $("#miles").val(),
-                price: $("#pricePerGallon").val(),
+                price: $("#price").val(),
                 gallons: $("#gallons").val(), 
                 latitude: $("#latitude").val(),
                 longitude: $("#longitude").val()
@@ -66,3 +71,4 @@ Helpers.submitMileage = function() {
         });
     });
 }
+

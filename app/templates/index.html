@@ -4,12 +4,12 @@
 <div id="form">
     <img id="loading" src="/static/img/285.gif">
     <form id="mainForm">
-        <p>Miles: <input type="number" id="miles" name="miles" autofocus step="0.1" class="standard"/></p>
-        <p>Price: <input type="number" id="pricePerGallon" name="pricePerGallon" step="0.001" class="standard"/></p>
-        <p>Gallons: <input type="number" id="gallons" name="gallons" step="0.001" class="standard"/></p>
+        <p>Miles: {{ form.miles }} </p>
+        <p>Price: {{ form.price }} </p>
+        <p>Gallons: {{ form.gallons }} </p>
         <p><input type="button" value="Submit" id="submitButton" name="submitButton"/></p>
-        <input type="hidden" id="latitude" value="" />
-        <input type="hidden" id="longitude" value="" />
+        {{ form.latitude }}
+        {{ form.longitude }}
     </form>
 </div>
 

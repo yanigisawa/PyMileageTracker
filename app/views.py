@@ -1,15 +1,17 @@
 from app import app, db
-from flask import render_template, request, flash, jsonify, url_for
+from flask import render_template, request, flash, jsonify, url_for, redirect
 from datetime import datetime, timedelta
 from pytz import timezone
 from models import FillUp
 import os, csv
 from time import strptime
 from decimal import Decimal
+from forms import EditMileageForm, MileageForm
 
 @app.route('/')
 def index():
-    return render_template("index.html")
+    form = MileageForm()
+    return render_template("index.html", form = form, url = "/")
 
 def getFillUpsTree():
     if not db.has_key("fillUps"):
@@ -28,7 +30,8 @@ def submitMileage():
     longitude = request.form["longitude"]
     if not longitude:
         longitude = 0
-    fillUp = FillUp(datetime.now(utczone), Decimal(request.form["miles"]), 
+    dateKey = datetime.now(utczone).replace(microsecond=0)
+    fillUp = FillUp(dateKey, Decimal(request.form["miles"]), 
         Decimal(request.form["price"]), 
         Decimal(request.form["gallons"]), 
         Decimal(latitude),
@@ -42,15 +45,34 @@ def submitMileage():
     response["success"] = True
     return jsonify(response)
 
+@app.route('/edit/<date>', methods = ["POST", "GET"])
+def editDate(date):
+    dt = getUTCDateFromString(date)
+    form = EditMileageForm()
+    fillUpRecord = getFillUpsTree()[dt]
+    template = None
+    if request.method == 'GET':
+        form.miles.data = fillUpRecord.miles
+        form.price.data = fillUpRecord.price
+        form.gallons.data = fillUpRecord.gallons
+        template = render_template("editRecord.html", record = fillUpRecord, form = form, dateKey = date)
+    else: 
+        fillUpRecord.miles = form.miles.data
+        fillUpRecord.price = form.price.data
+        fillUpRecord.gallons = form.gallons.data
+        template = redirect(url_for("history"))
+    return template
+
 @app.route('/recentHistory')
 def recentHistory():
     tree = getFillUpsTree()
     recentHistory = []
-    key = tree.maxKey()
-    while len(recentHistory) < 5:
-        recentHistory.append(tree[key])
-        oneSecondEarlier = key + timedelta(seconds = -1)
-        key = tree.maxKey(oneSecondEarlier)
+    if len(tree) > 0:
+        key = tree.maxKey()
+        while len(recentHistory) < 5:
+            recentHistory.append(tree[key])
+            oneSecondEarlier = key + timedelta(seconds = -1)
+            key = tree.maxKey(oneSecondEarlier)
 
     return render_template("recentHistory.html", recentHistory = recentHistory)
 
@@ -65,7 +87,7 @@ def history():
         oneSecondEarlier = maxKey + timedelta(seconds = -1)
         maxKey = tree.maxKey(oneSecondEarlier)
 
-    return render_template("full_history.html", recentHistory = recentHistory)
+    return render_template("full_history.html", recentHistory = recentHistory, url = "history")
 
 @app.route('/import')
 def importRecords():
@@ -117,6 +139,17 @@ def convertToUtcDate(time_struct):
 
     utcDateTime = estDateTime.astimezone(utczone)
     return utcDateTime 
+
+def getUTCDateFromString(dateString):
+    time_struct = strptime(dateString, "%Y_%m_%d_%H_%M_%S")
+    utcDateTime = datetime(year = time_struct.tm_year, 
+            month = time_struct.tm_mon, 
+            day = time_struct.tm_mday, 
+            hour =  time_struct.tm_hour,
+            minute = time_struct.tm_min,
+            second = time_struct.tm_sec,
+            tzinfo = timezone("UTC"))
+    return utcDateTime
 
 @app.context_processor
 def override_url_for():

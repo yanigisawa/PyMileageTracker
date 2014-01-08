@@ -29,13 +29,25 @@ class FillUp(object):
     def miles(self):
         return self._miles
 
+    @miles.setter
+    def miles(self, value):
+        self._miles = value
+
     @property
     def price(self):
         return self._price
 
+    @price.setter
+    def price(self, value):
+        self._price = value
+
     @property
     def gallons(self):
         return self._gallons
+
+    @gallons.setter
+    def gallons(self, value):
+        self._gallons = value
     
     @property
     def latitude(self):
