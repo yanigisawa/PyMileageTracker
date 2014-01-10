@@ -9,7 +9,7 @@
     </tr>
     {% for record in recentHistory %}
         <tr>
-            <td>{{ record.date }}</td><td>{{ record.miles }}</td>
+            <td>{{ record.date.date() }}</td><td>{{ record.miles }}</td>
             <td>{{ record.gallons }}</td><td>{{ record.price }}</td>
             <td>{{ record.mileage }} </td><td><a href="/edit/{{ record.date.strftime("%Y_%m_%d_%H_%M_%S") }}">Edit</a></td>
         </tr>   
