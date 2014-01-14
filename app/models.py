@@ -24,6 +24,10 @@ class FillUp(object):
     @property
     def date(self):
         return self._date
+    
+    @date.setter
+    def date(self, value):
+        self._date = value
 
     @property
     def miles(self):

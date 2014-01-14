@@ -120,6 +120,19 @@ def importRecords():
 
     return render_template("import_results.html", records = records)
 
+@app.route('/migrate')
+def migrate():
+    tree = getFillUpsTree()
+
+    for fuKey in tree:
+        if fuKey.microsecond > 0:
+            fuObj = tree[fuKey]
+            del tree[fuObj.date]
+            fuObj.date = fuObj.date.replace(microsecond = 0)
+            print(fuObj)
+            tree[fuObj.date] = fuObj
+    return "Migration Complete"
+
 def convertToUtcDate(time_struct):
     estzone = timezone("US/Eastern")
     utczone = timezone("UTC")
