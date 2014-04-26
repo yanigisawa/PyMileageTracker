@@ -21,7 +21,7 @@ Helpers.initializePage = function() {
         }
     });
 
-    // wire up click and entery key press events for form submission
+    // wire up click and enter key press events for form submission
     $("#submitButton").click(Helpers.submitMileage);
     $("#gallons").keypress(function(e) {
         if (e.which== 13) {
