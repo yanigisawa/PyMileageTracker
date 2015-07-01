@@ -64,6 +64,7 @@ class TestApi(unittest.TestCase):
             fu = tree[minKey]
             self.assertEqual(Decimal('123'), fu.gallons)
 
+    @unittest.skip("Manual Test Only")
     def test_RequestHistoryWhenEmpty_ReturnsEmptyList(self):
         with self.test_app.test_request_context(path="/recentHistory"):
             views.recentHistory()
