@@ -27,6 +27,18 @@ Helpers.initializePage = function() {
         if (e.which== 13) {
             submitMileage();
         }
+        Helpers.setFixedDecimal("#gallons", 3, e.which);
+        e.preventDefault();
+    });
+
+    $("#miles").keypress(function(e) { 
+      Helpers.setFixedDecimal("#miles", 1, e.which)
+      e.preventDefault();
+    });
+
+    $("#price").keypress(function(e) { 
+      Helpers.setFixedDecimal("#price", 3, e.which)
+      e.preventDefault();
     });
 
    var url = document.URL
@@ -72,3 +84,12 @@ Helpers.submitMileage = function() {
     });
 }
 
+Helpers.setFixedDecimal = function (inputId, places, pressedKey) {
+  var input = $(inputId);
+
+  if (!input.val().trim()) { input.val("0.0"); }
+  var divisor = Math.pow(10, places);
+  var inputInt = String.fromCharCode(pressedKey);
+  var newVal = parseFloat(input.val()) * 10 + parseInt(inputInt) / divisor;
+  input.val(parseFloat(newVal).toFixed(places));
+}
