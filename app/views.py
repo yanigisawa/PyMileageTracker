@@ -57,9 +57,9 @@ def editDate(date):
         form.gallons.data = fillUpRecord.gallons
         template = render_template("editRecord.html", record = fillUpRecord, form = form, dateKey = date)
     else: 
-        fillUpRecord.miles = form.miles.data
-        fillUpRecord.price = form.price.data
-        fillUpRecord.gallons = form.gallons.data
+        fillUpRecord.miles = Decimal(form.miles.data)
+        fillUpRecord.price = Decimal(form.price.data)
+        fillUpRecord.gallons = Decimal(form.gallons.data)
         template = redirect(url_for("history"))
     return template
 
