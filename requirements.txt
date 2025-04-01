@@ -1,7 +1,7 @@
 Flask==1.0
 Flask-WTF==0.9.4
 Flask-ZODB==0.1
-Jinja2==2.11.3
+Jinja2==3.1.6
 MarkupSafe==0.18
 WTForms==1.0.5
 Werkzeug==0.15.3
